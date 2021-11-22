@@ -7,8 +7,12 @@
  */
 
 plugins {
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+        // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
+
+    // Apply the application plugin to add support for building a CLI application in Java.
+
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.20'
 
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
@@ -29,6 +33,9 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:29.0-jre'
 
+    def coroutines_version = '1.5.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
     // Use the Kotlin test library.
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 
@@ -40,3 +47,24 @@ application {
     // Define the main class for the application.
     mainClass = 'com.bo.playkotlin.AppKt'
 }
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
+sourceSets {
+    main.kotlin.srcDirs = ['src']
+    main.resources.srcDirs = ['resources']
+    test.kotlin.srcDirs = ['test']
+}
+
